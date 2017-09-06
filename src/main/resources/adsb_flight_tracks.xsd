@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+
+
+    <xsd:element name="adsb_flight_tracks" type="FlightAwareTrackType"/>
+
+    <xsd:complexType name="FlightAwareTrackType">
+        <xsd:sequence>
+            <xsd:element name="hex" type="xsd:string"/>
+            <xsd:element name="squawk" type="xsd:string"/>
+            <xsd:element name="flight" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>
