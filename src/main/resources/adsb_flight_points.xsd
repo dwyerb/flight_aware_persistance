@@ -21,6 +21,16 @@
             <xsd:element name="messages" type="xsd:integer"/>
             <xsd:element name="seen" type="xsd:double"/>
             <xsd:element name="rssi" type="xsd:integer"/>
+            <xsd:element name="flight_track" type="FlightAwareTrackType"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="adsb_flight_tracks" type="FlightAwareTrackType"/>
+    <xsd:complexType name="FlightAwareTrackType">
+        <xsd:sequence>
+            <xsd:element name="hex" type="xsd:string"/>
+            <xsd:element name="squawk" type="xsd:string"/>
+            <xsd:element name="flight" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
 
