@@ -27,8 +27,8 @@
         <property name="show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
         <mapping package="net.muroc"/>
-        <mapping class="net.muroc.adsb_flight_points"/>
-        <mapping class="net.muroc.adsb_flight_tracks"/>
+        <mapping class="net.muroc.FlightAwareTrackType"/>
+        <mapping class="net.muroc.FlightAwarePointType"/>
 
 
         <!-- List of XML mapping files

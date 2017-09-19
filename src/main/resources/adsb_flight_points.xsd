@@ -20,7 +20,7 @@
             <xsd:element name="speed" type="xsd:integer"/>
             <xsd:element name="messages" type="xsd:integer"/>
             <xsd:element name="seen" type="xsd:double"/>
-            <xsd:element name="rssi" type="xsd:integer"/>
+            <xsd:element name="rssi" type="xsd:double"/>
             <xsd:element name="flight_track" type="FlightAwareTrackType"></xsd:element>
         </xsd:sequence>
     </xsd:complexType>
