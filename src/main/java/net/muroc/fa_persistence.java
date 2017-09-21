@@ -6,8 +6,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
@@ -41,6 +43,34 @@ public class fa_persistence {
         Flight_Aware_Messages messages = gson.fromJson(reader, Flight_Aware_Messages.class);
         List<FlightAwarePointType> AntennaReturn = messages.aircraft;
         AntennaReturn = messages.aircraft;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            for (FlightAwarePointType point: AntennaReturn)
+            {
+                //FlightAwareTrackType flightAwareTrackType = new FlightAwareTrackType();
+                //flightAwareTrackType.setHex(point.getHex());
+                //flightAwareTrackType.setFlight(point.getFlight());
+                //flightAwareTrackType.setSquawk(point.getSquawk());
+                session.save(point);
+            }
+            tx.commit();
+        }
+        catch (HibernateException e)
+        {
+            if(tx!=null) tx.rollback();
+            e.printStackTrace();
+        }
+        finally
+        {
+            List<FlightAwareTrackType> fatList = session.createCriteria(FlightAwareTrackType.class).list();
+            List<FlightAwarePointType> pointList = session.createCriteria(FlightAwarePointType.class).list();
+            session.close();
+            System.out.println("session closed");
+        }
+
+        //
+
         System.out.println("Count = " + AntennaReturn.size());
     }
 
