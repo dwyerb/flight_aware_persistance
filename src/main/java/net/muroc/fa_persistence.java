@@ -48,7 +48,7 @@ public class fa_persistence {
             tx = session.beginTransaction();
             for (FlightAwarePointType point: AntennaReturn)
             {
-                //FlightAwareTrackType flightAwareTrackType = new FlightAwareTrackType();
+                FlightAwareTrackType flightAwareTrackType = (FlightAwareTrackType) session.get(FlightAwareTrackType.class, new Long(0));
                 //flightAwareTrackType.setHex(point.getHex());
                 //flightAwareTrackType.setFlight(point.getFlight());
                 //flightAwareTrackType.setSquawk(point.getSquawk());
