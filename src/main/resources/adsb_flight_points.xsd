@@ -30,7 +30,7 @@
             <xsd:element name="squawk" type="xsd:string"/>
             <xsd:element name="flight" type="xsd:string"/>
             <xsd:element name="rssi" type="xsd:double"/>
-            <xsd:element name="flight_aware_point" type="FlightAwarePointType" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+            <xsd:element name="flightAwarePoint" type="FlightAwarePointType" minOccurs="1" maxOccurs="unbounded"></xsd:element>
         </xsd:sequence>
     </xsd:complexType>
 

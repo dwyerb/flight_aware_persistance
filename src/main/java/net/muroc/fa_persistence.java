@@ -19,7 +19,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Function;
 
 /**
  * Created by Brendan on 9/5/2017.
@@ -35,6 +38,7 @@ public class fa_persistence {
         SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         Session session = sessionFactory.openSession();
 
+
         String url = "http://192.168.0.4:8080/data/aircraft.json";
         InputStream source = retrieveStream(url);
 
@@ -42,17 +46,28 @@ public class fa_persistence {
         Reader reader = new InputStreamReader(source);
         Flight_Aware_Messages messages = gson.fromJson(reader, Flight_Aware_Messages.class);
         List<FlightAwarePointType> AntennaReturn = messages.aircraft;
+        //List<FlightAwareTrackType> AntennaReturn = messages.aircraft;
         AntennaReturn = messages.aircraft;
         Transaction tx = null;
+
+        List<FlightAwareTrackType> fatList = session.createCriteria(FlightAwareTrackType.class).list();
+
         try {
             tx = session.beginTransaction();
             for (FlightAwarePointType point: AntennaReturn)
             {
-                FlightAwareTrackType flightAwareTrackType = (FlightAwareTrackType) session.get(FlightAwareTrackType.class, new Long(0));
+                if (point.getHex()!=null && point.getFlight()!=null && point.getSquawk()!=null)
+                {
+                    SearchCriteria search = SearchCriteria.getInstance(point.getHex(),point.getFlight(),point.getSquawk());
+                    fatList.stream().filter(search.getCriteria("allFlights")).forEach(FlightAwareTrackType::setFlightAwarePoint(point));
+                    session.save(point);
+                    System.out.println("test");
+
+                }
+                //FlightAwareTrackType flightAwareTrackType = (FlightAwareTrackType) session.get(FlightAwareTrackType.class, new Long(0));
                 //flightAwareTrackType.setHex(point.getHex());
                 //flightAwareTrackType.setFlight(point.getFlight());
                 //flightAwareTrackType.setSquawk(point.getSquawk());
-                session.save(point);
             }
             tx.commit();
         }
@@ -63,7 +78,7 @@ public class fa_persistence {
         }
         finally
         {
-            List<FlightAwareTrackType> fatList = session.createCriteria(FlightAwareTrackType.class).list();
+
             List<FlightAwarePointType> pointList = session.createCriteria(FlightAwarePointType.class).list();
             session.close();
             System.out.println("session closed");
@@ -73,6 +88,8 @@ public class fa_persistence {
 
         System.out.println("Count = " + AntennaReturn.size());
     }
+
+
 
     private static InputStream retrieveStream(String url) {
         DefaultHttpClient client = new DefaultHttpClient();
